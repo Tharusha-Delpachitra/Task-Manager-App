@@ -1,0 +1,88 @@
+<div class="h-screen flex overflow-hidden">
+  <div class="w-1/2 flex flex-col justify-center items-center p-8 relative">
+    <div class="absolute top-8 left-8 flex flex-row gap-2 items-center">
+      <img src="/assets/logo.png" alt="Logo" class="h-10" />
+      <h1 class="text-3xl font-bold text-blue-700">TASKYFY</h1>
+    </div>
+
+    <div class="w-full max-w-md">
+      <h2 class="text-4xl font-bold mb-2 text-black">Welcome Back</h2>
+      <p class="text-gray-500 mb-2">Please sign in to your account</p>
+
+      <div *ngIf="formInvalidMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+        {{ formInvalidMessage }}
+      </div>
+
+      <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="mb-6">
+          <label class="block text-gray-600 text-sm font-medium mb-2" for="username">
+            Username
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-user text-gray-400"></i>
+            </div>
+            <input
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              [ngClass]="{'border-red-500': shouldShowError('username')}"
+              id="username"
+              type="text"
+              placeholder="Enter your username"
+              formControlName="username"
+              required
+            />
+          </div>
+          <div *ngIf="shouldShowError('username')" class="text-red-500 text-xs mt-1">
+            <div *ngIf="usernameControl?.errors?.['required']">Username is required</div>
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <div class="flex justify-between items-center mb-2">
+            <label class="block text-gray-600 text-sm font-medium" for="password">
+              Password
+            </label>
+          </div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-lock text-gray-400"></i>
+            </div>
+            <input
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              [ngClass]="{'border-red-500': shouldShowError('password')}"
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              formControlName="password"
+              required
+            />
+          </div>
+          <div *ngIf="shouldShowError('password')" class="text-red-500 text-xs mt-1">
+            <div *ngIf="passwordControl?.errors?.['required']">Password is required</div>
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-blue-900 hover:bg-blue-700 flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          [disabled]="isSubmitting">
+          <span>Sign In</span>
+        </button>
+      </form>
+
+      <div class="mt-8 text-center">
+        <p class="text-sm text-gray-600">
+          Don't have an account?
+          <a routerLink="/signup" class="font-medium text-blue-600 hover:text-blue-800">Sign up</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-1/2">
+    <img src="/assets/image.jpg" alt="background" class="w-full h-full object-fill">
+  </div>
+</div>
