@@ -22,6 +22,7 @@ interface TaskCounts {
   standalone: true,
   imports: [CommonModule, SidebarComponent, HeaderComponent, TaskCardComponent, TaskModalComponent, FormsModule],
 })
+
 export class DashboardComponent implements OnInit {
   isModalVisible = false;
   isEditMode = false;
@@ -98,16 +99,13 @@ export class DashboardComponent implements OnInit {
 
   onSaveTask(task: Omit<Task, 'id' | 'createdAt'>): void {
     if (this.isEditMode && this.taskToEdit) {
-      // Create a complete task object with the ID from taskToEdit for updating
       const updatedTask = {
         ...task,
         id: this.taskToEdit.id
       };
       
-      // Use updateTask for editing existing tasks
       this.taskService.updateTask(updatedTask).subscribe(
         (response) => {
-          // Update the task in the array
           this.tasks = this.tasks.map(t => 
             t.id === this.taskToEdit?.id ? this.mapResponseToFrontendTask(response) : t
           );
@@ -122,7 +120,6 @@ export class DashboardComponent implements OnInit {
         }
       );
     } else {
-      // Use createTask for new tasks (existing code)
       this.taskService.createTask(task).subscribe(
         (response) => {
           this.tasks = [...this.tasks, this.mapResponseToFrontendTask(response)];

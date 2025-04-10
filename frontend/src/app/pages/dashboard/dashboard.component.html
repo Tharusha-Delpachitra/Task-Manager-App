@@ -2,7 +2,7 @@
   <app-sidebar class="hidden md:block" (addTask)="onAddTask()"></app-sidebar>
 
   <div class="flex-1 flex flex-col">
-    <app-header></app-header>
+    <app-header (addTask)="onAddTask()"></app-header>
 
     <main class="flex-1 p-8 bg-gray-100 md:overflow-auto">
       <h1 class="text-3xl font-semibold mb-4">Tasks</h1>
@@ -23,7 +23,7 @@
           </select>
         </div>
 
-        <div class="flex items-center gap-1 sm:gap-3 text-xs sm:text-sm font-medium text-gray-700 bg-white p-2 rounded-lg">
+        <div class="flex items-center gap-1 lg:gap-3 text-xs lg:text-sm font-medium text-gray-700 bg-white p-2 rounded-lg">
           <div class="flex items-center gap-1">
             <span class="text-gray-500">Total:</span>
             <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 text-gray-700">{{ tasks.length }}</span>
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+      <div class="grid grid-cols-1 gap-6">
         <app-task-card
           *ngFor="let task of filteredTasks"
           [task]="task"

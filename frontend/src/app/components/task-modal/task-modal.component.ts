@@ -50,21 +50,18 @@ export class TaskModalComponent implements OnInit, OnChanges {
   }
 
   onSave(): void {
-    // Mark all fields as touched to show validation errors
     Object.keys(this.form.controls).forEach(field => {
       const control = this.form.get(field);
       control?.markAsTouched();
     });
     
-    // Check if form is valid before proceeding
     if (this.form.invalid) {
       console.log('Form is invalid:', this.form.errors);
       console.log('Title errors:', this.form.get('title')?.errors);
       console.log('Description errors:', this.form.get('description')?.errors);
-      return; // Stop execution if form is invalid
+      return;
     }
-  
-    // Only emit the save event if the form is valid
+
     this.save.emit(this.form.value);
     this.form.reset({ title: '', description: '', status: 'Pending' });
   }

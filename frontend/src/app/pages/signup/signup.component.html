@@ -46,7 +46,7 @@
           </div>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-6">
           <div class="flex justify-between items-center mb-2">
             <label class="block text-gray-600 text-sm font-medium" for="password">
               Password
@@ -71,22 +71,6 @@
             <div *ngIf="passwordControl?.errors?.['minlength']">Password must be at least 6 characters.</div>
             <div *ngIf="passwordControl?.errors?.['pattern']">Password must include uppercase, lowercase, and numbers.</div>
           </div>
-        </div>
-
-        <div class="flex items-center mb-4">
-          <input
-            id="termsAccepted"
-            type="checkbox"
-            formControlName="termsAccepted"
-            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            [ngClass]="{'border-red-500': shouldShowError('termsAccepted')}"
-          >
-          <label for="termsAccepted" class="ml-2 block text-sm text-gray-700">
-            I agree to the <a href="#" class="text-blue-600 hover:text-blue-800">Terms of Service</a> and <a href="#" class="text-blue-600 hover:text-blue-800">Privacy Policy</a>
-          </label>
-        </div>
-        <div *ngIf="shouldShowError('termsAccepted')" class="text-red-500 text-xs mt-1 mb-4">
-          You must accept the Terms of Service and Privacy Policy.
         </div>
 
         <button

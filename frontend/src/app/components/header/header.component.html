@@ -1,25 +1,40 @@
 <div class="bg-white shadow-sm px-6 py-3 flex justify-between items-center">
-    <div class="text-gray-600 flex flex-col md:flex-row gap-2">
-      <span class="font-medium">
-        <i class="fa-regular fa-calendar mr-2"></i>
-        <span>{{ currentDate }} |</span>
-      </span>
-      <span>
-        <i class="fa-regular fa-clock mr-2"></i>
-        <span>{{ currentTime }}</span>
-      </span>
-    </div>
-    
-    <div class="items-center gap-3 hidden sm:flex">
-      <div class="text-right">
-        <p class="text-lg ">{{ userName }}</p>
-      </div>
-      <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-        {{ userInitials }}
-      </div>
-    </div>
-    <a (click)="onLogout()" class="flex md:hidden items-center gap-2 p-2 rounded-lg bg-red-500 hover:bg-red-700 transition-colors text-center justify-center cursor-pointer">
-      <i class="fa-solid fa-sign-out-alt"></i>
-      <span>Logout</span>
-    </a>
+  <div
+    class="text-gray-600 flex flex-col md:flex-row gap-2 text-sm sm:text-base"
+  >
+    <span class="font-medium">
+      <i class="fa-regular fa-calendar mr-2"></i>
+      <span>{{ currentDate }} |</span>
+    </span>
+    <span>
+      <i class="fa-regular fa-clock mr-2"></i>
+      <span>{{ currentTime }}</span>
+    </span>
   </div>
+
+  <a
+    (click)="onAddTask()"
+    class="flex md:hidden text-sm items-center gap-2 p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-center justify-center cursor-pointer"
+  >
+    <i class="fa-solid fa-plus"></i>
+    <span>Add Task</span>
+  </a>
+
+  <div class="items-center gap-3 hidden md:flex">
+    <div class="text-right">
+      <p class="text-lg">{{ userName }}</p>
+    </div>
+    <div
+      class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold"
+    >
+      {{ userInitials }}
+    </div>
+  </div>
+  <a
+    (click)="onLogout()"
+    class="flex md:hidden text-sm items-center gap-2 p-2 rounded-lg bg-red-500 text-white hover:bg-red-700 transition-colors text-center justify-center cursor-pointer"
+  >
+    <i class="fa-solid fa-sign-out-alt"></i>
+    <span>Logout</span>
+  </a>
+</div>

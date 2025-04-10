@@ -1,8 +1,8 @@
 <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow border-l-8" 
      [ngClass]="borderClass">
   <div class="flex justify-between items-center mb-3">
-    <h3 class="text-xl font-semibold">{{ task.title }}</h3>
-    <span class="px-2 py-1 rounded-full text-xs font-medium" 
+    <h3 class="text-lg sm:text-xl font-semibold">{{ task.title }}</h3>
+    <span class="px-2 py-1 rounded-full text-xs font-medium sm:w-auto w-[100px] flex justify-center" 
           [ngClass]="[statusBgClass, statusTextClass]">
       {{ task.status }}
     </span>

@@ -27,7 +27,6 @@ export class SignupComponent implements OnInit {
         Validators.minLength(6),
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/) // Requires at least one lowercase, one uppercase, and one number
       ]),
-      termsAccepted: new FormControl(false, [Validators.requiredTrue])
     });
   }
 
@@ -76,7 +75,7 @@ export class SignupComponent implements OnInit {
         
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 2000);
+        }, 1000);
       },
       error: (error: any) => {
         this.isSubmitting = false;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -15,12 +15,13 @@ export class HeaderComponent implements OnInit {
   userName: string = '';
   userInitials: string = '';
 
+  @Output() addTask = new EventEmitter<void>();
+
   constructor(private router: Router) { }
-  
+
   ngOnInit(): void {
     this.updateDateTime();
     this.loadUserName();
-    // Update time every minute
     setInterval(() => this.updateDateTime(), 60000);
   }
 
@@ -28,7 +29,7 @@ export class HeaderComponent implements OnInit {
     const storedUsername = sessionStorage.getItem('username');
     if (storedUsername) {
       this.userName = storedUsername;
-      this.generateUserInitials(); // Generate initials after loading the username
+      this.generateUserInitials(); 
     }
   }
   
@@ -58,6 +59,10 @@ export class HeaderComponent implements OnInit {
     } else {
       this.userInitials = ''; 
     }
+  }
+  
+  onAddTask(): void {
+    this.addTask.emit();
   }
 
   onLogout(): void {
