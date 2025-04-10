@@ -1,7 +1,8 @@
 package com.app.backend.dto;
 
 import lombok.Data;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 /**
  * (DTOs) Data Transfer Objects for user-related requests and responses.
@@ -27,7 +28,7 @@ public class TaskDto {
         private String title;
         private String description;
         private String status;
-        private LocalDateTime createdAt;
+        private LocalDate createdAt;;
         private Long userId;
     }
 }

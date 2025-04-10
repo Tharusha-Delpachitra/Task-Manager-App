@@ -5,20 +5,31 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { TaskCardComponent, Task } from '../../components/task-card/task-card.component';
 import { TaskModalComponent } from '../../components/task-modal/task-modal.component';
 import { TaskService } from '../../services/task.service';
-import { TaskResponseDTO } from '../../services/task.service'; // Import TaskResponseDTO
+import { TaskResponseDTO } from '../../services/task.service';
+import { FormsModule } from '@angular/forms';
+
+interface TaskCounts {
+  all: number;
+  pending: number;
+  inProgress: number;
+  completed: number;
+}
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, SidebarComponent, HeaderComponent, TaskCardComponent, TaskModalComponent],
+  imports: [CommonModule, SidebarComponent, HeaderComponent, TaskCardComponent, TaskModalComponent, FormsModule],
 })
 export class DashboardComponent implements OnInit {
   isModalVisible = false;
   isEditMode = false;
   taskToEdit: Task | null = null;
   tasks: Task[] = [];
+  filteredTasks: Task[] = [];
+  selectedStatus: string = '';
+  taskCounts: TaskCounts = { all: 0, pending: 0, inProgress: 0, completed: 0 };
 
   constructor(private taskService: TaskService) { }
 
@@ -30,17 +41,33 @@ export class DashboardComponent implements OnInit {
     this.taskService.getAllTasks().subscribe(
       (tasks) => {
         this.tasks = tasks;
+        this.updateTaskCounts(); 
+        this.filterTasks();
       },
       (error) => {
         console.error('Error loading tasks:', error);
-        // Handle error (e.g., display a message to the user)
       }
     );
   }
 
+  filterTasks(): void {
+    if (!this.selectedStatus) {
+      this.filteredTasks = [...this.tasks];
+    } else {
+      this.filteredTasks = this.tasks.filter(task => task.status === this.selectedStatus);
+    }
+  }
+
+  updateTaskCounts(): void {
+    this.taskCounts.all = this.tasks.length;
+    this.taskCounts.pending = this.tasks.filter(task => task.status === 'Pending').length;
+    this.taskCounts.inProgress = this.tasks.filter(task => task.status === 'In Progress').length;
+    this.taskCounts.completed = this.tasks.filter(task => task.status === 'Completed').length;
+  }
+
   onEditTask(task: Task): void {
     this.isEditMode = true;
-    this.taskToEdit = { ...task }; // Create a copy to avoid modifying the original directly
+    this.taskToEdit = { ...task };
     this.isModalVisible = true;
   }
 
@@ -48,11 +75,11 @@ export class DashboardComponent implements OnInit {
     this.taskService.deleteTask(taskId).subscribe(
       () => {
         this.tasks = this.tasks.filter(task => task.id !== taskId);
-        // Optionally, show a success message
+        this.updateTaskCounts(); 
+        this.filterTasks();
       },
       (error) => {
         console.error('Error deleting task:', error);
-        // Handle error
       }
     );
   }
@@ -68,37 +95,19 @@ export class DashboardComponent implements OnInit {
   }
 
   onSaveTask(task: Omit<Task, 'id' | 'createdAt'>): void {
-    if (this.isEditMode && this.taskToEdit) {
-      // Update existing task
-      const updatedTask: Omit<Task, 'createdAt'> & { id: number } = { ...task, id: this.taskToEdit.id };
-      this.taskService.updateTask(updatedTask).subscribe(
-        (response) => {
-          this.tasks = this.tasks.map(t => (t.id === updatedTask.id ? this.mapResponseToFrontendTask(response) : t));
-          this.isModalVisible = false;
-          // Optionally, show a success message
-        },
-        (error) => {
-          console.error('Error updating task:', error);
-          // Handle error
-        }
-      );
-    } else {
-      // Add new task
-      this.taskService.createTask(task).subscribe(
-        (response) => {
-          this.tasks = [...this.tasks, this.mapResponseToFrontendTask(response)];
-          this.isModalVisible = false;
-          // Optionally, show a success message
-        },
-        (error) => {
-          console.error('Error creating task:', error);
-          // Handle error
-        }
-      );
-    }
+    this.taskService.createTask(task).subscribe(
+      (response) => {
+        this.tasks = [...this.tasks, this.mapResponseToFrontendTask(response)];
+        this.updateTaskCounts();
+        this.filterTasks();
+        this.isModalVisible = false;
+      },
+      (error) => {
+        console.error('Error creating task:', error);
+      }
+    );
   }
 
-  // Helper function to map TaskResponseDTO back to frontend Task
   private mapResponseToFrontendTask(response: TaskResponseDTO): Task {
     return {
       id: response.id,

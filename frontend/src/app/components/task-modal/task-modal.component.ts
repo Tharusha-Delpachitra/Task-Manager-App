@@ -16,7 +16,7 @@ export class TaskModalComponent implements OnInit, OnChanges {
   @Input() taskToEdit: Task | null = null;
 
   @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<Omit<Task, 'id' | 'createdAt'>>(); // Emit a Task without ID and createdAt
+  @Output() save = new EventEmitter<Omit<Task, 'id' | 'createdAt'>>(); 
 
   task: { title: string; description: string; status: string } = {
     title: '',
@@ -56,7 +56,7 @@ export class TaskModalComponent implements OnInit, OnChanges {
 
   onSave(): void {
     if (this.task.title.trim() === '') {
-      return; // Don't save if title is empty
+      return; 
     }
 
     const taskToEmit: Omit<Task, 'id' | 'createdAt'> = {
