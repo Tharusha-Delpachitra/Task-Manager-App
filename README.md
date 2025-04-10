@@ -4,7 +4,7 @@ This section provides instructions on how to run the Angular frontend, Spring Bo
 
 ### Prerequisites
 
-Ensure you have the following installed in addition to the prerequisites mentioned for Docker:
+Ensure you have the following installed:
 
   * **Java Development Kit (JDK):** Version **17** or a compatible later version is required for the Spring Boot backend.
   * **Node.js and npm (or yarn):** Required for running the Angular frontend. Ensure you have a recent version installed. Based on your `package.json`, you are using **Angular 19**. You can download Node.js from [nodejs.org](https://nodejs.org/). npm usually comes bundled with Node.js.
