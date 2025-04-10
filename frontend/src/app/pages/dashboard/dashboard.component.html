@@ -1,0 +1,28 @@
+<div class="h-screen flex">
+  <app-sidebar class="hidden md:block" (addTask)="onAddTask()"></app-sidebar>
+
+  <div class="flex-1 flex flex-col">
+    <app-header></app-header>
+
+    <main class="flex-1 p-8 bg-gray-100 overflow-auto">
+      <h1 class="text-3xl font-semibold mb-6">Tasks</h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+        <app-task-card
+          *ngFor="let task of tasks"
+          [task]="task"
+          (edit)="onEditTask($event)"
+          (delete)="onDeleteTask($event)">
+        </app-task-card>
+      </div>
+    </main>
+  </div>
+
+  <app-task-modal
+    [isVisible]="isModalVisible"
+    [editMode]="isEditMode"
+    [taskToEdit]="taskToEdit"
+    (close)="onCloseModal()"
+    (save)="onSaveTask($event)">
+  </app-task-modal>
+</div>

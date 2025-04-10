@@ -2,4 +2,4 @@
     "plugins": {
       "@tailwindcss/postcss": {}
     }
-  }
+}

@@ -32,30 +32,24 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Clear any stored error messages on initialization
     this.errorMessage = '';
     this.formInvalidMessage = '';
     
-    // Check if already logged in
     if (localStorage.getItem('token')) {
       this.router.navigate(['/dashboard']);
     }
   }
 
   signup() {
-    // Set form as submitted
     this.formSubmitted = true;
     
-    // Reset error messages
     this.errorMessage = '';
     this.formInvalidMessage = '';
     
-    // Mark all controls as touched to ensure validation messages show
     Object.values(this.signupForm.controls).forEach(control => {
       control.markAsTouched();
     });
     
-    // Check if form is valid
     if (this.signupForm.invalid) {
       if (!this.usernameControl?.valid) {
         this.formInvalidMessage = 'Please enter a valid username (minimum 3 characters).';
@@ -69,10 +63,8 @@ export class SignupComponent implements OnInit {
       return;
     }
 
-    // Set loading state
     this.isSubmitting = true;
 
-    // Extract registration data, omitting the terms acceptance flag
     const registrationData = {
       username: this.signupForm.value.username,
       password: this.signupForm.value.password
@@ -80,17 +72,13 @@ export class SignupComponent implements OnInit {
 
     this.authService.register(registrationData).subscribe({
       next: (response: any) => {
-        // Show success message and provide login link
         this.registrationSuccess = true;
         
-        // Optionally, you could automatically log the user in after successful registration
-        // by calling the login method with the same credentials
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 3000); // Redirect to login after 3 seconds
+        }, 2000);
       },
       error: (error: any) => {
-        // Handle different error scenarios
         this.isSubmitting = false;
         
         if (error?.status === 409) {
@@ -100,7 +88,6 @@ export class SignupComponent implements OnInit {
         } else if (error?.error?.message) {
           this.errorMessage = error.error.message;
         } else if (error?.error) {
-          // Handle case where error.error might be a string
           this.errorMessage = typeof error.error === 'string' ? error.error : 'Registration failed. Please try again.';
         } else if (error?.message) {
           this.errorMessage = error.message;
@@ -110,7 +97,6 @@ export class SignupComponent implements OnInit {
         console.error('Registration failed:', error);
       },
       complete: () => {
-        // Reset loading state
         this.isSubmitting = false;
       }
     });
@@ -128,7 +114,6 @@ export class SignupComponent implements OnInit {
     return this.signupForm.controls['termsAccepted'];
   }
   
-  // Helper method to check if control should show errors
   shouldShowError(controlName: string): boolean {
     const control = this.signupForm.get(controlName);
     return this.formSubmitted || (control?.invalid && control?.touched) ? true : false;
