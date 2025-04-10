@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   selectedStatus: string = '';
   taskCounts: TaskCounts = { all: 0, pending: 0, inProgress: 0, completed: 0 };
 
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {
     this.loadTasks();
@@ -77,9 +77,11 @@ export class DashboardComponent implements OnInit {
         this.tasks = this.tasks.filter(task => task.id !== taskId);
         this.updateTaskCounts(); 
         this.filterTasks();
+        alert('Task deleted successfully!');
       },
       (error) => {
         console.error('Error deleting task:', error);
+        alert('Failed to delete task.');
       }
     );
   }
@@ -95,17 +97,46 @@ export class DashboardComponent implements OnInit {
   }
 
   onSaveTask(task: Omit<Task, 'id' | 'createdAt'>): void {
-    this.taskService.createTask(task).subscribe(
-      (response) => {
-        this.tasks = [...this.tasks, this.mapResponseToFrontendTask(response)];
-        this.updateTaskCounts();
-        this.filterTasks();
-        this.isModalVisible = false;
-      },
-      (error) => {
-        console.error('Error creating task:', error);
-      }
-    );
+    if (this.isEditMode && this.taskToEdit) {
+      // Create a complete task object with the ID from taskToEdit for updating
+      const updatedTask = {
+        ...task,
+        id: this.taskToEdit.id
+      };
+      
+      // Use updateTask for editing existing tasks
+      this.taskService.updateTask(updatedTask).subscribe(
+        (response) => {
+          // Update the task in the array
+          this.tasks = this.tasks.map(t => 
+            t.id === this.taskToEdit?.id ? this.mapResponseToFrontendTask(response) : t
+          );
+          this.updateTaskCounts();
+          this.filterTasks();
+          this.isModalVisible = false;
+          alert('Task updated successfully!');
+        },
+        (error) => {
+          console.error('Error updating task:', error);
+          alert('Failed to update task.');
+        }
+      );
+    } else {
+      // Use createTask for new tasks (existing code)
+      this.taskService.createTask(task).subscribe(
+        (response) => {
+          this.tasks = [...this.tasks, this.mapResponseToFrontendTask(response)];
+          this.updateTaskCounts();
+          this.filterTasks();
+          this.isModalVisible = false;
+          alert('Task added successfully!');
+        },
+        (error) => {
+          console.error('Error creating task:', error);
+          alert('Failed to add task.');
+        }
+      );
+    }
   }
 
   private mapResponseToFrontendTask(response: TaskResponseDTO): Task {

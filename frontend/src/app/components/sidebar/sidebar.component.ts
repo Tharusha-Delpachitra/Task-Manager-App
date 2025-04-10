@@ -12,11 +12,6 @@ import { RouterModule, Router } from '@angular/router';
 export class SidebarComponent {
   @Output() addTask = new EventEmitter<void>();
 
-  navItems = [
-    { icon: 'fa-solid fa-home', label: 'Dashboard', link: '/dashboard', active: false },
-    { icon: 'fa-solid fa-tasks', label: 'Tasks', link: '/tasks', active: true },
-  ];
-
   constructor(private router: Router) { }
 
   onAddTask(): void {
