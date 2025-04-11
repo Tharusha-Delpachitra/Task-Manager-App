@@ -53,8 +53,9 @@
         <div *ngIf="filteredTasks.length === 0 && tasks.length > 0" class="text-gray-500 italic">
           No tasks found with the selected status.
         </div>
-        <div *ngIf="tasks.length === 0" class="text-gray-500 italic">
-          No tasks available.
+        <div *ngIf="tasks.length === 0" class="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-400 rounded-lg h-full">
+          <i class="fa fa-plus-circle fa-3x text-blue-500 mb-3"></i>
+          <p class="text-gray-500 italic mb-2">No tasks available.</p>
         </div>
       </div>
     </main>

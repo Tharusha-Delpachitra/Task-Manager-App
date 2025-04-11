@@ -10,10 +10,20 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Registers a new user with the provided credentials.
+   * @param registrationData - Object containing username and password.
+   * @returns Observable of the backend response (text).
+   */
   register(registrationData: { username: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, registrationData, { responseType: 'text' });
   }
 
+  /**
+   * Logs in an existing user with the provided credentials.
+   * @param loginData - Object containing username and password.
+   * @returns Observable of the backend response (likely containing JWT).
+   */
   login(loginData: { username: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, loginData);
   }

@@ -19,6 +19,11 @@ export class LoginComponent implements OnInit {
   isSubmitting = false;
   formSubmitted = false;
 
+  /**
+   * Constructor injecting required services.
+   * @param authService AuthService for login API calls
+   * @param router Router for navigation after login
+   */
   constructor(private authService: AuthService, private router: Router) {
     this.loginForm = new FormGroup({
       username: new FormControl('', [Validators.required]),
@@ -26,6 +31,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Initializes the component.
+   * Redirects to dashboard if user is already logged in.
+   */
   ngOnInit(): void {
     this.errorMessage = '';
     this.formInvalidMessage = '';
@@ -35,6 +44,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Handles login form submission.
+   * Performs validation and calls AuthService to log in.
+   */
   login() {
     this.formSubmitted = true;
 
@@ -61,7 +74,7 @@ export class LoginComponent implements OnInit {
       error: (error: any) => {
         this.isSubmitting = false;
 
-        if (error?.status === 401) {
+        if (error?.status === 400) {
           this.errorMessage = 'Invalid username or password.';
         } else if (error?.status === 0) {
           this.errorMessage = 'Unable to connect to the server. Please check your internet connection.';
@@ -84,6 +97,11 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls['password'];
   }
 
+  /**
+   * Determines whether to show validation error for a control.
+   * @param controlName Name of the control
+   * @returns true if control is invalid and touched or form has been submitted
+   */
   shouldShowError(controlName: string): boolean {
     const control = this.loginForm.get(controlName);
     return this.formSubmitted || (control?.invalid && control?.touched) ? true : false;

@@ -18,7 +18,12 @@ export class SignupComponent implements OnInit {
   isSubmitting = false;
   formSubmitted = false;
   registrationSuccess = false;
-
+  
+  /**
+   * Constructor for injecting services.
+   * @param authService Service to handle registration
+   * @param router Router for redirection after success 
+   */
   constructor(private authService: AuthService, private router: Router) {
     this.signupForm = new FormGroup({
       username: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -30,15 +35,23 @@ export class SignupComponent implements OnInit {
     });
   }
 
+  /**
+   * Initializes the component.
+   * Redirects if token exits in sessionStorage.
+   */
   ngOnInit(): void {
     this.errorMessage = '';
     this.formInvalidMessage = '';
     
-    if (localStorage.getItem('token')) {
+    if (sessionStorage.getItem('token')) {
       this.router.navigate(['/dashboard']);
     }
   }
 
+  /**
+   * Handles signup form submission.
+   * Validates and registers a new user via the AuthService. 
+   */
   signup() {
     this.formSubmitted = true;
     
@@ -54,8 +67,6 @@ export class SignupComponent implements OnInit {
         this.formInvalidMessage = 'Please enter a valid username (minimum 3 characters).';
       } else if (!this.passwordControl?.valid) {
         this.formInvalidMessage = 'Password must be at least 6 characters with at least one uppercase letter, one lowercase letter, and one number.';
-      } else if (!this.termsControl?.valid) {
-        this.formInvalidMessage = 'You must accept the Terms of Service and Privacy Policy.';
       } else {
         this.formInvalidMessage = 'Please fill in all required fields correctly.';
       }
@@ -75,7 +86,7 @@ export class SignupComponent implements OnInit {
         
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 1000);
+        }, 3000);
       },
       error: (error: any) => {
         this.isSubmitting = false;
@@ -113,6 +124,12 @@ export class SignupComponent implements OnInit {
     return this.signupForm.controls['termsAccepted'];
   }
   
+  /**
+   * 
+   * Determines if an error message should be shown for a control.
+   * @param controlName Name of the form control
+   * @returns true if control is invalid and touched or form has been submitted
+   */
   shouldShowError(controlName: string): boolean {
     const control = this.signupForm.get(controlName);
     return this.formSubmitted || (control?.invalid && control?.touched) ? true : false;

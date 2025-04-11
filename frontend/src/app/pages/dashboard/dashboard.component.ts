@@ -8,6 +8,7 @@ import { TaskService } from '../../services/task.service';
 import { TaskResponseDTO } from '../../services/task.service';
 import { FormsModule } from '@angular/forms';
 
+// Interface for tracking count of tasks by status.
 interface TaskCounts {
   all: number;
   pending: number;
@@ -34,10 +35,16 @@ export class DashboardComponent implements OnInit {
 
   constructor(private taskService: TaskService) {}
 
+  /**
+   * Initialize the component and load tasks.
+   */
   ngOnInit(): void {
     this.loadTasks();
   }
 
+  /**
+   * Loads all tasks from the server and updates task counts and filtered tasks.
+   */
   loadTasks(): void {
     this.taskService.getAllTasks().subscribe(
       (tasks) => {
@@ -51,6 +58,9 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  /**
+   * Filters tasks based on the selected status.
+   */
   filterTasks(): void {
     if (!this.selectedStatus) {
       this.filteredTasks = [...this.tasks];
@@ -59,6 +69,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  /**
+   * Updates the counts of tasks based on their status.
+   */
   updateTaskCounts(): void {
     this.taskCounts.all = this.tasks.length;
     this.taskCounts.pending = this.tasks.filter(task => task.status === 'Pending').length;
@@ -66,12 +79,20 @@ export class DashboardComponent implements OnInit {
     this.taskCounts.completed = this.tasks.filter(task => task.status === 'Completed').length;
   }
 
+  /**
+   * Handles editing a task by opening the modal with the selected task.
+   * @param task The task to edit 
+   */
   onEditTask(task: Task): void {
     this.isEditMode = true;
     this.taskToEdit = { ...task };
     this.isModalVisible = true;
   }
 
+  /**
+   * Deletes a task by its ID and updates the task list.
+   * @param taskId ID of the task to delete 
+   */
   onDeleteTask(taskId: number): void {
     this.taskService.deleteTask(taskId).subscribe(
       () => {
@@ -87,16 +108,26 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  /**
+   * Prepares the modal for adding a new task. 
+   */
   onAddTask(): void {
     this.isEditMode = false;
     this.taskToEdit = null;
     this.isModalVisible = true;
   }
 
+  /**
+   * Closes the task modal. 
+   */
   onCloseModal(): void {
     this.isModalVisible = false;
   }
 
+  /**
+   * Saves a task (either creates a new task or updates an existing one).
+   * @param task The task data to save (without ID and createdAt) 
+   */
   onSaveTask(task: Omit<Task, 'id' | 'createdAt'>): void {
     if (this.isEditMode && this.taskToEdit) {
       const updatedTask = {
@@ -136,6 +167,11 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  /**
+   * Converts a response DTO from the backend to a frontend Task object.
+   * @param response The task response from the backend
+   * @returns Task object compatible with frontend 
+   */
   private mapResponseToFrontendTask(response: TaskResponseDTO): Task {
     return {
       id: response.id,

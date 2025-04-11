@@ -14,10 +14,16 @@ export class SidebarComponent {
 
   constructor(private router: Router) { }
 
+  /**
+   * Emits an event to notify the DashboardComponent, HeaderComponent to open the task modal or trigger add-task logic.
+   */
   onAddTask(): void {
     this.addTask.emit();
   }
 
+  /**
+   * Clears session data and redirects the user to the login page.
+   */
   onLogout(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('username');

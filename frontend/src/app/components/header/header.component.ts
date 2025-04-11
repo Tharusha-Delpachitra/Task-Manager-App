@@ -19,12 +19,19 @@ export class HeaderComponent implements OnInit {
 
   constructor(private router: Router) { }
 
+  /**
+   * Initializes the component.
+   * Sets the current date/time and loads the user's name and initials.
+   */
   ngOnInit(): void {
     this.updateDateTime();
     this.loadUserName();
     setInterval(() => this.updateDateTime(), 60000);
   }
 
+  /**
+   * Loads the username from session storage and generates initials.
+   */
   loadUserName(): void {
     const storedUsername = sessionStorage.getItem('username');
     if (storedUsername) {
@@ -33,6 +40,9 @@ export class HeaderComponent implements OnInit {
     }
   }
   
+  /**
+   * Updates the current date and time based on the system clock. 
+   */
   updateDateTime(): void {
     const now = new Date();
     this.currentDate = now.toLocaleDateString('en-US', { 
@@ -48,6 +58,9 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  /**
+   * Generates initials from the user's full name. 
+   */
   generateUserInitials(): void {
     if (this.userName) {
       const nameParts = this.userName.trim().split(' ');
@@ -61,10 +74,16 @@ export class HeaderComponent implements OnInit {
     }
   }
   
+  /**
+   * Emits the addTask event to notify the DashboardComponent to open the task modal.
+   */
   onAddTask(): void {
     this.addTask.emit();
   }
 
+  /**
+   * Clears session data and redirects the user to the login page..
+   */
   onLogout(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('username');

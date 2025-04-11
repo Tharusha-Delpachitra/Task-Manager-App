@@ -23,6 +23,9 @@ export class TaskModalComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder) {}
 
+  /**
+   * Initializes the form with validation rules.
+   */
   ngOnInit(): void {
     this.form = this.fb.group({
       title: ['', [
@@ -37,6 +40,10 @@ export class TaskModalComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Runs when input properties change.
+   * Pre-fills or resets the form depending on editMode and taskToEdit. 
+   */
   ngOnChanges(): void {
     if (this.taskToEdit && this.editMode && this.form) {
       this.form.patchValue({
@@ -49,6 +56,10 @@ export class TaskModalComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * Called when the save button is clicked.
+   * Validates the form and emits the save event if valid.
+   */
   onSave(): void {
     Object.keys(this.form.controls).forEach(field => {
       const control = this.form.get(field);
@@ -66,10 +77,18 @@ export class TaskModalComponent implements OnInit, OnChanges {
     this.form.reset({ title: '', description: '', status: 'Pending' });
   }
 
+  /**
+   * Emits the close event when the modal should be closed. 
+   */
   onClose(): void {
     this.close.emit();
   }
 
+  /**
+   * Closes the modal if the backdrop (outside the form) is clicked.
+   * Prevents closing when clicking inside the modal content. 
+   * @param event MouseEvent triggered by clicking on the backdrop
+   */
   onBackdropClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
       this.onClose();
